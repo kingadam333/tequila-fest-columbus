@@ -280,7 +280,7 @@ export default function VIPExperience() {
           className="text-center"
         >
           <a
-            href="https://tequilafestusa.com/events/tequila-fest-columbus-2026"
+            href="https://www.tequilafestusa.com/events/columbus"
             target="_blank"
             rel="noopener noreferrer"
             className="cursor-pointer inline-flex items-center gap-3 font-bold text-xl px-12 py-5 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 relative overflow-hidden group"
