@@ -3,9 +3,11 @@
 import { motion } from "framer-motion";
 
 const brands = [
-  "Patrón", "Don Julio", "Casamigos", "Clase Azul", "Herradura",
-  "1800 Tequila", "Espolòn", "El Jimador", "Milagro", "Tres Generaciones",
-  "Avión", "Casa Noble", "Fortaleza", "Cincoro", "Gran Centenario",
+  "Camerena", "Avion", "Gran Coramino", "1800", "Jose Cuervo",
+  "Gran Centenario", "Dobel", "Milagro", "Del Maguey", "Olmeca Altos",
+  "Codigo 1530", "El Jimador", "Hornitos", "El Tesoro", "Sauza",
+  "Ghost", "G4", "Los Linderos", "Suavecito", "Teremana",
+  "Viva Agave", "Dolce Vida", "Corazon", "Authentico",
 ];
 
 export default function TequilaSpotlight() {
@@ -75,6 +77,22 @@ export default function TequilaSpotlight() {
               <p className="text-white/40 text-sm mt-1">{t.desc}</p>
             </div>
           ))}
+        </motion.div>
+
+        {/* Brand CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="text-center mt-10"
+        >
+          <a
+            href="https://www.tequilafestusa.com/brand-packages"
+            className="inline-flex items-center gap-2 bg-black border border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-black font-semibold text-sm tracking-widest uppercase px-8 py-3 rounded-full transition-all duration-200"
+          >
+            Add Your Tequila Brand
+          </a>
         </motion.div>
       </div>
 
