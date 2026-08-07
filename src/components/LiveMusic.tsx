@@ -2,6 +2,39 @@
 
 import { motion } from "framer-motion";
 
+const djs = [
+  {
+    name: "DJ MYSTIANA",
+    time: "3:00 PM – 5:00 PM",
+    desc: "Opening the fiesta with infectious beats to get the crowd moving",
+    badgeColor: "yellow",
+    gradient: "from-purple-900/40 via-black to-yellow-900/20",
+    x: -30,
+  },
+  {
+    name: "DJ SAMUEL",
+    time: "5:00 PM – 7:00 PM",
+    desc: "Taking the energy higher as the tequila flows and the sun sets",
+    badgeColor: "red",
+    gradient: "from-red-900/40 via-black to-purple-900/20",
+    x: 30,
+  },
+  {
+    name: "DJ DEE FERG",
+    time: "7:00 PM – 9:00 PM",
+    desc: "Closing out the night with a fire set that brings the house down",
+    badgeColor: "purple",
+    gradient: "from-purple-900/50 via-black to-red-900/20",
+    x: -30,
+  },
+];
+
+const badgeStyles: Record<string, { bg: string; border: string; dot: string; text: string }> = {
+  yellow: { bg: "bg-yellow-500/20", border: "border-yellow-500/40", dot: "bg-yellow-400", text: "text-yellow-400" },
+  red: { bg: "bg-red-500/20", border: "border-red-500/40", dot: "bg-red-400", text: "text-red-400" },
+  purple: { bg: "bg-purple-500/20", border: "border-purple-500/40", dot: "bg-purple-400", text: "text-purple-400" },
+};
+
 export default function LiveMusic() {
   return (
     <section className="relative bg-[#120800] py-24 px-4 overflow-hidden">
@@ -23,10 +56,10 @@ export default function LiveMusic() {
             All Day · All Night
           </p>
           <h2 className="font-display text-white" style={{ fontSize: "clamp(2.5rem, 7vw, 5rem)" }}>
-            LIVE MUSIC
+            BATTLE OF THE DJs
           </h2>
           <p className="text-white/50 mt-4 max-w-xl mx-auto">
-            Two acts. Six hours of music. The main stage never stops.
+            Three DJs. Six hours of music. The main stage never stops.
           </p>
           <div className="w-24 h-1 bg-yellow-500 mx-auto mt-4 rounded-full" />
         </motion.div>
@@ -45,40 +78,31 @@ export default function LiveMusic() {
         </div>
 
         {/* Lineup cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* DJ Fusemania */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-purple-900/40 via-black to-red-900/20 p-8"
-          >
-            <div className="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-b from-yellow-500/10 via-transparent to-transparent pointer-events-none" style={{ clipPath: "polygon(20% 0, 80% 0, 100% 100%, 0% 100%)" }} />
-            <div className="inline-flex items-center gap-2 bg-yellow-500/20 border border-yellow-500/40 rounded-full px-4 py-1.5 mb-5">
-              <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-              <span className="text-yellow-400 text-xs font-bold tracking-widest uppercase">3:00 PM – 6:00 PM</span>
-            </div>
-            <p className="font-display text-white text-4xl md:text-5xl mb-2">DJ FUSEMANIA</p>
-            <p className="text-white/50">Kicking off the fiesta with high-energy beats to get the party started</p>
-          </motion.div>
-
-          {/* Apostle Jones Band */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-red-900/40 via-black to-purple-900/20 p-8"
-          >
-            <div className="absolute top-0 right-1/4 w-32 h-full bg-gradient-to-b from-red-500/10 via-transparent to-transparent pointer-events-none" style={{ clipPath: "polygon(20% 0, 80% 0, 100% 100%, 0% 100%)" }} />
-            <div className="inline-flex items-center gap-2 bg-red-500/20 border border-red-500/40 rounded-full px-4 py-1.5 mb-5">
-              <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
-              <span className="text-red-400 text-xs font-bold tracking-widest uppercase">6:30 PM – 9:00 PM</span>
-            </div>
-            <p className="font-display text-white text-4xl md:text-5xl mb-2">APOSTLE JONES BAND</p>
-            <p className="text-white/50">Closing out the night and bringing the house down on the main stage</p>
-          </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {djs.map((dj, i) => {
+            const badge = badgeStyles[dj.badgeColor];
+            return (
+              <motion.div
+                key={dj.name}
+                initial={{ opacity: 0, x: dj.x }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+                className={`relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br ${dj.gradient} p-8`}
+              >
+                <div
+                  className="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-b from-yellow-500/10 via-transparent to-transparent pointer-events-none"
+                  style={{ clipPath: "polygon(20% 0, 80% 0, 100% 100%, 0% 100%)" }}
+                />
+                <div className={`inline-flex items-center gap-2 ${badge.bg} border ${badge.border} rounded-full px-4 py-1.5 mb-5`}>
+                  <span className={`w-2 h-2 rounded-full ${badge.dot} animate-pulse`} />
+                  <span className={`${badge.text} text-xs font-bold tracking-widest uppercase`}>{dj.time}</span>
+                </div>
+                <p className="font-display text-white text-4xl md:text-5xl mb-2">{dj.name}</p>
+                <p className="text-white/50">{dj.desc}</p>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Schedule summary */}
@@ -91,9 +115,10 @@ export default function LiveMusic() {
         >
           {[
             { time: "3:00 PM", event: "Doors Open" },
-            { time: "3:00 PM", event: "DJ Fusemania" },
+            { time: "3:00 PM", event: "DJ Mystiana" },
             { time: "4:00 PM", event: "Tequila Sampling Begins" },
-            { time: "6:30 PM", event: "Apostle Jones Band" },
+            { time: "5:00 PM", event: "DJ Samuel" },
+            { time: "7:00 PM", event: "DJ Dee Ferg" },
             { time: "8:00 PM", event: "Last Pour" },
             { time: "9:00 PM", event: "Event Ends" },
           ].map((item) => (
