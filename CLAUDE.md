@@ -20,14 +20,18 @@ npm install --cache /tmp/npm-cache
 
 ## What This Is
 
-A single-page marketing/splash site for **Tequila Fest Columbus** — an annual tequila festival held at the Greater Columbus Convention Center area. All ticket sales redirect to TequilaFestUSA.com; this site has no e-commerce or auth.
+A single-page marketing/splash site for **Tequila Fest Columbus** — an annual tequila festival held in Columbus, Ohio (2027 venue TBA). All ticket sales redirect to TequilaFestUSA.com; this site has no e-commerce or auth.
 
 **All three city sites (Cincinnati, Cleveland, Columbus) share identical design, layout, and components. Only the city-specific content differs: event date, venue, logo, hero image, gallery photos, and ticket URLs. Cincinnati (`/Users/adambossin/Sites/tequila-fest-cincinnati`) is the design source of truth.**
 
 **Event details:**
-- Date: August 8, 2026, 3:00 PM – 9:00 PM
+- Date: August 14, 2027, 3:00 PM – 9:00 PM (Saturday)
 - Tequila sampling: 4:00 PM – 8:00 PM
-- Venue: Greater Columbus Convention Center, Columbus, OH
+- Venue: **TBA** — not yet booked. The site says "Venue TBA · Columbus, OH" in the
+  Hero row, the EventDetails strip and the OG/Twitter images, and the Event JSON-LD
+  carries the city rather than a Place. All of those need updating together once the
+  venue is confirmed. (The 2026 event ran at Gravity, 480 W Broad St — the earlier
+  "Greater Columbus Convention Center" in this file was never correct.)
 - Ticket URL: `https://www.tequilafestusa.com/events/columbus#tickets`
 - Vendor URL: `https://www.tequilafestusa.com/vendors`
 - Brand packages URL: `https://www.tequilafestusa.com/brand-packages`
@@ -72,7 +76,8 @@ All three link to the ticket URL.
 ```
 /public/hero-bg.jpg                      — hero background photo
 /public/tequilafest_columbus_logo.png    — event logo (displayed in hero + OG image)
-/public/gallery/                         — add Columbus event photos here
+/public/llms.txt                         — plain-text event summary for AI crawlers
+/public/gallery/                         — currently Cincinnati's photos (see Parity section)
 ```
 
 ## OG / Social Image
@@ -112,8 +117,8 @@ Camerena · Avion · Gran Coramino · 1800 · Jose Cuervo · Gran Centenario · 
 ## Content Updates
 
 All content is hardcoded — no CMS. To update:
-- **Event date/countdown:** `Hero.tsx` → `eventDate` constant (`new Date("2026-08-08T15:00:00")`)
-- **Hero date/venue display:** `Hero.tsx` → the date/time/venue info row below the tagline (not yet added — copy pattern from Cincinnati)
+- **Event date/countdown:** `Hero.tsx` → `eventDate` constant (`new Date("2027-08-14T15:00:00")`)
+- **Hero date/venue display:** `Hero.tsx` → the date/time/venue info row below the tagline
 - **Event details strip:** `EventDetails.tsx` → `details` array
 - **Hero city name:** `Hero.tsx` → the `COLUMBUS` text in the h2
 - **Sponsor banner:** `OfficialBanner.tsx` → brand name and label
@@ -122,19 +127,50 @@ All content is hardcoded — no CMS. To update:
 - **Music lineup:** `LiveMusic.tsx` → artist cards and schedule timeline
 - **Gallery:** drop files into `/public/gallery/`, update `media` array in `Gallery.tsx`
 - **All ticket links:** grep for `tequilafestusa.com/events/columbus` to find all instances
-- **OG image:** `src/app/opengraph-image.tsx` needs to be created (copy from Cincinnati and update city/date/logo)
+- **OG image:** `src/app/opengraph-image.tsx` → date/venue string (and `twitter-image.tsx`, which is a separate edge-runtime variant with a gradient background instead of the hero photo)
+- **Page metadata / JSON-LD:** `src/app/layout.tsx` → titles, descriptions, keywords, and the Event + LocalBusiness structured data
+- **AI-crawler summary:** `public/llms.txt`
 
-## Known Gap vs Cincinnati/Cleveland
+## Parity with Cincinnati/Cleveland
 
-Columbus is missing:
-- **Date/time/venue info row in Hero** — Cincinnati and Cleveland have this below the tagline; Columbus does not yet. Copy the pattern from `tequila-fest-cincinnati/src/components/Hero.tsx`.
-- **OG image** — `src/app/opengraph-image.tsx` may not exist; copy from Cincinnati and update.
+Brought up to Cleveland's level: the Hero date/time/venue row, `opengraph-image.tsx`,
+`twitter-image.tsx`, `robots.ts`, `sitemap.ts`, `public/llms.txt`, the sr-only SEO
+paragraph in `page.tsx`, and full page metadata with Event + LocalBusiness JSON-LD.
+
+Still different from the other two:
+- **Gallery photos are Cincinnati's.** `/public/gallery/` holds the same
+  `2024-06-15 *.jpg` files as the Cincinnati site — copied when this site was cloned
+  and never replaced. Real Columbus photos should go in and `Gallery.tsx`'s `media`
+  array updated to match.
+- **No Google Tag Manager.** Cleveland runs GTM (`GTM-MCV8GDVW`) alongside its Meta
+  Pixel; Cincinnati and Columbus have only the direct Meta Pixel. Columbus's pixel is
+  `312417059684193`. A Columbus GTM container would need to be created in the GTM
+  account first — don't reuse Cleveland's ID.
+- **No `icon.png` / `apple-icon.png`.** Cleveland has both; Columbus has `favicon.ico` only.
+
+## Ticket Status (2027)
+
+Tickets are **not on sale**. The `columbus` event row on TequilaFestUSA.com is
+`coming_soon` with no ticket types configured, so `/events/columbus` shows a
+coming-soon state and nothing is purchasable. The Hero and TicketsCTA buttons still
+read "GET TICKETS" (same as the other two sites) and link to that page. The ticket
+price cards in `Highlights.tsx` still show the 2026 prices ($5 / $55 / $125) — confirm
+them before the 2027 on-sale.
+
+## Email Signup → Brevo
+
+`EmailSignup.tsx` posts to `POST /api/subscribe`, which adds the address to **Brevo
+list 103** (Cincinnati uses 93, Cleveland 102) and requires `BREVO_API_KEY`. The
+Supabase `email_subscribers` insert is the secondary path and is null-safe when its
+env vars are missing — but a deploy without `BREVO_API_KEY` silently stops signups
+reaching the mailing list.
 
 ## Environment Variables
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+BREVO_API_KEY=          # required — without it email signups never reach Brevo list 103
 ```
 
 Both optional for local dev — Supabase client is null-safe when empty. Only email signup requires them at runtime. Values must be empty (not placeholder text) or Supabase will throw a URL validation error at build time.

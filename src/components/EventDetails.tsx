@@ -12,7 +12,7 @@ const details = [
       </svg>
     ),
     label: "Date",
-    value: "August 8, 2026",
+    value: "August 14, 2027",
     sub: "Saturday",
   },
   {
@@ -34,8 +34,8 @@ const details = [
       </svg>
     ),
     label: "Location",
-    value: "Gravity",
-    sub: "480 W Broad St, Columbus, OH",
+    value: "Venue TBA",
+    sub: "Columbus, OH — announcing soon",
   },
   {
     icon: (
