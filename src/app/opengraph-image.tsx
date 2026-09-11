@@ -42,7 +42,9 @@ export default function Image() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "rgba(0,0,0,0.62)",
+            // Heavier than Cleveland's 0.62: the Columbus hero photo is a bright,
+          // busy daytime crowd shot and the gold highlights line was washing out.
+          background: "rgba(0,0,0,0.72)",
           }}
         />
 
